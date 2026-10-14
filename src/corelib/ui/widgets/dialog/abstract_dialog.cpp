@@ -396,6 +396,7 @@ void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         d->content->setMaximumWidth(static_cast<int>(Ui::DesignSystem::dialog().normalWidth()));
     }
     d->content->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->content->setBorderRadius(Ui::DesignSystem::dialog().borderRadius());
     d->title->setBackgroundColor(Qt::transparent);
     d->title->setTextColor(Ui::DesignSystem::color().onBackground());
     d->title->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());

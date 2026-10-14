@@ -1083,6 +1083,11 @@ public:
          */
         qreal maximumWidth() const;
 
+        /**
+         * @brief Радиус скругления углов диалога
+         */
+        qreal borderRadius() const;
+
     private:
         explicit Dialog(qreal _scaleFactor);
         friend class DesignSystemPrivate;

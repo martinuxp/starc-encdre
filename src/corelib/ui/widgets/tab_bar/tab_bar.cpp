@@ -587,13 +587,16 @@ void TabBar::paintEvent(QPaintEvent* _event)
         //
         // Ховер
         //
+        // Material Design 3: state layers use the content color
+        //
         if (isTabCurrent && hasFocus()) {
-            painter.setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
-            painter.fillRect(tabBoundingRect, Ui::DesignSystem::color().accent());
+            painter.setOpacity(0.12);
+            painter.fillRect(tabBoundingRect, textColor());
         } else if (underMouse() && tabBoundingRect.contains(mapFromGlobal(QCursor::pos()))) {
-            painter.setOpacity(Ui::DesignSystem::hoverBackgroundOpacity());
-            painter.fillRect(tabBoundingRect, Ui::DesignSystem::color().accent());
+            painter.setOpacity(0.08);
+            painter.fillRect(tabBoundingRect, textColor());
         }
+        painter.setOpacity(1.0);
 
         //
         // Декорация
@@ -664,10 +667,19 @@ void TabBar::paintEvent(QPaintEvent* _event)
         // Подчёркивание
         //
         if (isTabCurrent) {
+            //
+            // Material Design 3: the active indicator spans the tab content and has
+            // rounded top corners
+            //
+            const qreal indicatorWidth = std::min(
+                tabBoundingRect.width(),
+                std::max(d->tabContentWidth(tab), 24.0 * Ui::DesignSystem::scaleFactor()));
+            const qreal indicatorLeft
+                = tabBoundingRect.left() + (tabBoundingRect.width() - indicatorWidth) / 2.0;
             const QRectF decorationRect = QRectF(
-                QPointF(tabBoundingRect.left(),
+                QPointF(indicatorLeft,
                         tabBoundingRect.bottom() - Ui::DesignSystem::tabBar().underlineHeight()),
-                tabBoundingRect.bottomRight());
+                QPointF(indicatorLeft + indicatorWidth, tabBoundingRect.bottom()));
 
             if (d->activeTabIndicatorAnimation.state() != QAbstractAnimation::Running) {
                 d->activeTabIndicatorAnimation.setStartValue(decorationRect);
@@ -680,7 +692,15 @@ void TabBar::paintEvent(QPaintEvent* _event)
                     && d->activeTabIndicatorAnimation.currentValue().isValid()
                 ? d->activeTabIndicatorAnimation.currentValue().toRectF()
                 : decorationRect;
-            painter.fillRect(currentDecorationRect, painter.pen().color());
+            const qreal indicatorRadius = currentDecorationRect.height();
+            painter.save();
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.setClipRect(currentDecorationRect);
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(Ui::DesignSystem::color().accent());
+            painter.drawRoundedRect(currentDecorationRect.adjusted(0, 0, 0, indicatorRadius),
+                                    indicatorRadius, indicatorRadius);
+            painter.restore();
         }
 
         tabX += (isLeftToRight() ? 1 : -1) * tabBoundingRect.width();

@@ -81,6 +81,26 @@ bool StructureProxyModel::filterAcceptsRow(int _sourceRow, const QModelIndex& _s
     const auto structure = qobject_cast<StructureModel*>(sourceModel());
     const auto item = structure->itemForIndex(index);
 
+#ifdef HIDE_STATISTICS_DOCUMENTS
+    //
+    // Скрываем документы статистики, если их редакторы недоступны в сборке
+    //
+    switch (item->type()) {
+    case Domain::DocumentObjectType::ScreenplayStatistics:
+    case Domain::DocumentObjectType::ScreenplaySeriesStatistics:
+    case Domain::DocumentObjectType::ComicBookStatistics:
+    case Domain::DocumentObjectType::AudioplayStatistics:
+    case Domain::DocumentObjectType::StageplayStatistics:
+    case Domain::DocumentObjectType::NovelStatistics: {
+        return false;
+    }
+
+    default: {
+        break;
+    }
+    }
+#endif
+
     //
     // Скрываем элементы, которые не попадают в спискок доступных
     //

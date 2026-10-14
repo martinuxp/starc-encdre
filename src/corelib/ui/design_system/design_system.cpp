@@ -1747,7 +1747,7 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     qreal scrollableLeftMargin = 52.0;
-    qreal underlineHeight = 2.0;
+    qreal underlineHeight = 3.0;
 };
 
 DesignSystem::TabBar::Implementation::Implementation(qreal _scaleFactor)
@@ -2153,6 +2153,7 @@ public:
     qreal minimumWidth = 420.0;
     qreal normalWidth = 600.0;
     qreal maximumWidth = 800.0;
+    qreal borderRadius = 28.0;
 };
 
 DesignSystem::Dialog::Implementation::Implementation(qreal _scaleFactor)
@@ -2161,6 +2162,7 @@ DesignSystem::Dialog::Implementation::Implementation(qreal _scaleFactor)
     minimumWidth *= _scaleFactor;
     normalWidth *= _scaleFactor;
     maximumWidth *= _scaleFactor;
+    borderRadius *= _scaleFactor;
 }
 
 // **
@@ -2185,6 +2187,11 @@ qreal DesignSystem::Dialog::normalWidth() const
 qreal DesignSystem::Dialog::maximumWidth() const
 {
     return d->maximumWidth;
+}
+
+qreal DesignSystem::Dialog::borderRadius() const
+{
+    return d->borderRadius;
 }
 
 DesignSystem::Dialog::Dialog(qreal _scaleFactor)

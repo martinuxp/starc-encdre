@@ -16,6 +16,7 @@ public:
 
 
     bool isResizeActive = true;
+    qreal borderRadius = -1.0;
     QTimer sizeAnimationStartTimer;
     QTimer moveAnimationStartTimer;
     QVariantAnimation sizeAnimation;
@@ -179,13 +180,25 @@ void ResizableWidget::moveEvent(QMoveEvent* _event)
     }
 }
 
+void ResizableWidget::setBorderRadius(qreal _radius)
+{
+    if (qFuzzyCompare(d->borderRadius, _radius)) {
+        return;
+    }
+
+    d->borderRadius = _radius;
+    update();
+}
+
 void ResizableWidget::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
+    const qreal borderRadius
+        = d->borderRadius >= 0.0 ? d->borderRadius : Ui::DesignSystem::card().borderRadius();
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::NoPen);
     painter.setBrush(backgroundColor());
-    painter.drawRoundedRect(rect(), Ui::DesignSystem::card().borderRadius(),
-                            Ui::DesignSystem::card().borderRadius());
+    painter.drawRoundedRect(rect(), borderRadius, borderRadius);
 }

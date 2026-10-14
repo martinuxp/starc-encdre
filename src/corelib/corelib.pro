@@ -26,6 +26,14 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 DEFINES += CORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS
 
+#
+# Encuadre Script: statistics editors are private Story Apps plugins, hide their documents
+# in the project tree when they are not part of the build
+#
+!exists($$PWD/../core/management_layer/plugins/screenplay_statistics/screenplay_statistics.pro) {
+    DEFINES += HIDE_STATISTICS_DOCUMENTS
+}
+
 mac {
     DESTDIR = ../_build/starcapp.app/Contents/Frameworks
 

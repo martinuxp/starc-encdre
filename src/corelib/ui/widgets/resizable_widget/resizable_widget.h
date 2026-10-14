@@ -19,6 +19,11 @@ public:
      */
     void setResizingActive(bool _active);
 
+    /**
+     * @brief Задать радиус скругления углов (отрицательное значение - как у карточек)
+     */
+    void setBorderRadius(qreal _radius);
+
 protected:
     /**
      * @brief Переопределяем для реализации анимированного изменения размера
