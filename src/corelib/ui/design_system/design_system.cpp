@@ -456,19 +456,24 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
               _font.setLetterSpacing(QFont::AbsoluteSpacing, _letterSpacing * _scaleFactor);
           };
 
-    initFont(QFont::Light, QFont::Capitalization::MixedCase, 96, -1.5, h1);
-    initFont(QFont::Light, QFont::Capitalization::MixedCase, 60, -0.5, h2);
-    initFont(QFont::Normal, QFont::Capitalization::MixedCase, 48, 0.0, h3);
-    initFont(QFont::Normal, QFont::Capitalization::MixedCase, 34, 0.25, h4);
+    //
+    // Encuadre Script: Material Design 3 type scale
+    // h1-h3 display, h4-h5 headline, h6 & subtitles title, body, button label large,
+    // caption body small, overline label small
+    //
+    initFont(QFont::Normal, QFont::Capitalization::MixedCase, 57, -0.25, h1);
+    initFont(QFont::Normal, QFont::Capitalization::MixedCase, 45, 0.0, h2);
+    initFont(QFont::Normal, QFont::Capitalization::MixedCase, 36, 0.0, h3);
+    initFont(QFont::Normal, QFont::Capitalization::MixedCase, 28, 0.0, h4);
     initFont(QFont::Normal, QFont::Capitalization::MixedCase, 24, 0.0, h5);
-    initFont(QFont::Medium, QFont::Capitalization::MixedCase, 20, 0.15, h6);
-    initFont(QFont::Normal, QFont::Capitalization::MixedCase, 16, 0.15, subtitle1);
+    initFont(QFont::Normal, QFont::Capitalization::MixedCase, 22, 0.0, h6);
+    initFont(QFont::Medium, QFont::Capitalization::MixedCase, 16, 0.15, subtitle1);
     initFont(QFont::Medium, QFont::Capitalization::MixedCase, 14, 0.1, subtitle2);
     initFont(QFont::Normal, QFont::Capitalization::MixedCase, 16, 0.5, body1);
     initFont(QFont::Normal, QFont::Capitalization::MixedCase, 14, 0.25, body2);
-    initFont(QFont::Medium, QFont::Capitalization::AllUppercase, 14, 1.25, button);
+    initFont(QFont::Medium, QFont::Capitalization::MixedCase, 14, 0.1, button);
     initFont(QFont::Normal, QFont::Capitalization::MixedCase, 12, 0.4, caption);
-    initFont(QFont::Normal, QFont::Capitalization::AllUppercase, 10, 1.5, overline);
+    initFont(QFont::Medium, QFont::Capitalization::MixedCase, 11, 0.5, overline);
 
     iconsSmall.setPixelSize(static_cast<int>(16 * _scaleFactor));
     iconsMid.setPixelSize(static_cast<int>(24 * _scaleFactor));
@@ -955,10 +960,10 @@ public:
     QMarginsF margins = { 16.0, 0.0, 16.0, 0.0 };
     qreal spacing = 16.0;
     QMarginsF shadowMargins = { 8.0, 8.0, 8.0, 10.0 };
-    qreal minimumShadowBlurRadius = 8.0;
-    qreal maximumShadowBlurRadius = 22.0;
+    qreal minimumShadowBlurRadius = 2.0;
+    qreal maximumShadowBlurRadius = 8.0;
     qreal borderRadius = 4.0;
-    QSizeF iconSize = { 22.0, 22.0 };
+    QSizeF iconSize = { 20.0, 20.0 };
 };
 
 DesignSystem::Button::Implementation::Implementation(qreal _scaleFactor, int _density)
@@ -975,7 +980,10 @@ DesignSystem::Button::Implementation::Implementation(qreal _scaleFactor, int _de
     shadowMargins *= _scaleFactor;
     minimumShadowBlurRadius *= _scaleFactor;
     maximumShadowBlurRadius *= _scaleFactor;
-    borderRadius *= _scaleFactor;
+    //
+    // Encuadre Script: MD3 buttons are fully rounded
+    //
+    borderRadius = height / 2.0;
     iconSize *= _scaleFactor;
 }
 
@@ -2087,10 +2095,10 @@ class DesignSystem::Card::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    qreal borderRadius = 4.0;
+    qreal borderRadius = 12.0;
     QMarginsF shadowMargins = { 14.0, 14.0, 14.0, 14.0 };
-    qreal minimumShadowBlurRadius = 4.0;
-    qreal maximumShadowBlurRadius = 28.0;
+    qreal minimumShadowBlurRadius = 2.0;
+    qreal maximumShadowBlurRadius = 16.0;
 };
 
 DesignSystem::Card::Implementation::Implementation(qreal _scaleFactor)
@@ -2625,62 +2633,67 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
     QColor onError;
 
     switch (_forTheme) {
+    //
+    // Encuadre Script: MD3 schemes generated from the brand seed color #6792CB.
+    // Mapping of the legacy roles: accent = MD3 primary, primary = navigation surface,
+    // background = main surface, surface = surface container
+    //
     case Ui::ApplicationTheme::DarkAndLight: {
-        primary = "#323740";
-        accent = "#448aff";
-        background = "#ffffff";
-        surface = "#f3f3f3";
-        error = "#ec3740";
+        primary = "#22262d";
+        accent = "#426189";
+        background = "#f9f9fe";
+        surface = "#eceef5";
+        error = "#a83836";
         shadow = [] {
             QColor color = "#000000";
             color.setAlphaF(0.36);
             return color;
         }();
-        onPrimary = "#ffffff";
-        onAccent = "#ffffff";
-        onBackground = "#000000";
-        onSurface = "#000000";
-        onError = "#ffffff";
+        onPrimary = "#e2e5ef";
+        onAccent = "#f8f8ff";
+        onBackground = "#2e333a";
+        onSurface = "#2e333a";
+        onError = "#fff7f6";
         onShadow = "#ffffff";
         break;
     }
 
     case Ui::ApplicationTheme::Dark: {
-        primary = "#323740";
-        accent = "#5796ff";
-        background = "#272b34";
-        surface = "#22262e";
-        error = "#ff4e4e";
+        primary = "#22262d";
+        accent = "#b1c8ec";
+        background = "#1c2026";
+        surface = "#161a1f";
+        error = "#fa746f";
         shadow = [] {
             QColor color = "#000000";
             color.setAlphaF(0.68);
             return color;
         }();
-        onPrimary = "#ffffff";
-        onAccent = "#f8f8f2";
-        onBackground = "#f8f8f2";
-        onSurface = "#f8f8f2";
-        onError = "#f8f8f2";
-        onShadow = "#f8f8f2";
+        onPrimary = "#e2e5ef";
+        onAccent = "#2a415f";
+        onBackground = "#e2e5ef";
+        onSurface = "#e2e5ef";
+        onError = "#490006";
+        onShadow = "#e2e5ef";
         break;
     }
 
     case Ui::ApplicationTheme::Light: {
-        primary = "#e4e4e4";
-        accent = "#448aff";
-        background = "#ffffff";
-        surface = "#f3f3f3";
-        error = "#ec3740";
+        primary = "#e6e8f0";
+        accent = "#426189";
+        background = "#f9f9fe";
+        surface = "#eceef5";
+        error = "#a83836";
         shadow = [] {
             QColor color = "#000000";
             color.setAlphaF(0.36);
             return color;
         }();
-        onPrimary = "#38393a";
-        onAccent = "#ffffff";
-        onBackground = "#000000";
-        onSurface = "#000000";
-        onError = "#ffffff";
+        onPrimary = "#2e333a";
+        onAccent = "#f8f8ff";
+        onBackground = "#2e333a";
+        onSurface = "#2e333a";
+        onError = "#fff7f6";
         onShadow = "#FFFFFF";
         break;
     }
