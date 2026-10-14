@@ -165,6 +165,11 @@ signals:
     void exportCurrentDocumentPressed();
 
     /**
+     * @brief Пользователь хочет опубликовать сценарий в портал Encuadre
+     */
+    void publishToEncuadrePressed();
+
+    /**
      * @brief Нажат пункт меню "Импортировать"
      */
     void importPressed();

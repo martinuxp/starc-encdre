@@ -135,7 +135,7 @@ DEPENDPATH += $$PWD/../3rd_party/webloader
 SOURCES += \
     management_layer/application_manager.cpp \
     management_layer/content/account/account_manager.cpp \
-    management_layer/content/export/export_manager.cpp \
+    management_layer/content/encuadre/encuadre_manager.cpp     management_layer/content/export/export_manager.cpp \
     management_layer/content/import/import_manager.cpp \
     management_layer/content/notifications/notifications_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
@@ -204,7 +204,7 @@ SOURCES += \
     ui/project/project_tool_bar.cpp \
     ui/project/project_tree_delegate.cpp \
     ui/project/project_view.cpp \
-    ui/projects/create_project_dialog.cpp \
+    ui/encuadre/encuadre_publish_dialog.cpp     ui/projects/create_project_dialog.cpp \
     ui/projects/project_card.cpp \
     ui/projects/project_team_card.cpp \
     ui/projects/projects_cards_graphics_view.cpp \
@@ -234,7 +234,7 @@ HEADERS += \
     core_global.h \
     management_layer/application_manager.h \
     management_layer/content/account/account_manager.h \
-    management_layer/content/export/export_manager.h \
+    management_layer/content/encuadre/encuadre_manager.h     management_layer/content/export/export_manager.h \
     management_layer/content/import/import_manager.h \
     management_layer/content/notifications/notifications_manager.h \
     management_layer/content/onboarding/onboarding_manager.h \
@@ -303,7 +303,7 @@ HEADERS += \
     ui/project/project_tool_bar.h \
     ui/project/project_tree_delegate.h \
     ui/project/project_view.h \
-    ui/projects/create_project_dialog.h \
+    ui/encuadre/encuadre_publish_dialog.h     ui/projects/create_project_dialog.h \
     ui/projects/project_card.h \
     ui/projects/project_team_card.h \
     ui/projects/projects_cards_graphics_view.h \

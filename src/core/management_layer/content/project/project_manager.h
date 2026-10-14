@@ -138,6 +138,12 @@ public:
     BusinessLayer::AbstractModel* firstScriptModel() const;
 
     /**
+     * @brief Модели текстов всех сценариев проекта с их названиями
+     * @note Используется для публикации в портал Encuadre
+     */
+    QVector<QPair<QString, BusinessLayer::AbstractModel*>> screenplayTextModels() const;
+
+    /**
      * @brief Текущий открытый документ
      */
     Domain::DocumentObject* currentDocument() const;

@@ -1,6 +1,7 @@
 #include "application_manager.h"
 
 #include "content/account/account_manager.h"
+#include "content/encuadre/encuadre_manager.h"
 #include "content/export/export_manager.h"
 #include "content/import/import_manager.h"
 #include "content/notifications/notifications_manager.h"
@@ -359,6 +360,11 @@ public:
     void exportCurrentDocument();
 
     /**
+     * @brief Опубликовать сценарий проекта в портал Encuadre
+     */
+    void publishToEncuadre();
+
+    /**
      * @brief Активировать полноэкранный режим
      */
     void toggleFullScreen();
@@ -422,6 +428,7 @@ public:
     QScopedPointer<ProjectManager> projectManager;
     QScopedPointer<ImportManager> importManager;
     QScopedPointer<ExportManager> exportManager;
+    QScopedPointer<EncuadreManager> encuadreManager;
     QScopedPointer<SettingsManager> settingsManager;
     QScopedPointer<WritingSessionManager> writingSessionManager;
     QScopedPointer<NotificationsManager> notificationsManager;
@@ -469,6 +476,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , projectManager(new ProjectManager(nullptr, applicationView, pluginsBuilder))
     , importManager(new ImportManager(nullptr, applicationView))
     , exportManager(new ExportManager(nullptr, applicationView))
+    , encuadreManager(new EncuadreManager(nullptr, applicationView))
     , settingsManager(
           new SettingsManager(nullptr, applicationView, pluginsBuilder, shortcutsManager.data()))
     , writingSessionManager(new WritingSessionManager(nullptr, applicationView->view()))
@@ -508,6 +516,7 @@ ApplicationManager::Implementation::~Implementation()
              projectManager.data(),
              importManager.data(),
              exportManager.data(),
+             encuadreManager.data(),
              writingSessionManager.data(),
 #ifdef CLOUD_SERVICE_MANAGER
              cloudServiceManager.data(),
@@ -2556,6 +2565,53 @@ void ApplicationManager::Implementation::importProject()
     importManager->import();
 }
 
+void ApplicationManager::Implementation::publishToEncuadre()
+{
+    const auto currentProject = projectsManager->currentProject();
+    if (currentProject == nullptr) {
+        return;
+    }
+
+    //
+    // В портал публикуется файл проекта, поэтому он должен быть локальным файлом .encdre
+    //
+    if (currentProject->projectType() != BusinessLayer::ProjectType::Local
+        || !currentProject->path().endsWith(BusinessLayer::ProjectsModelProjectItem::extension(),
+                                            Qt::CaseInsensitive)) {
+        StandardDialog::information(
+            applicationView, tr("Publicar en Encuadre"),
+            tr("Para publicar en el portal, guarda primero la historia como archivo .encdre "
+               "(menú > Guardar como)."));
+        return;
+    }
+
+    const auto screenplays = projectManager->screenplayTextModels();
+    if (screenplays.isEmpty()) {
+        StandardDialog::information(applicationView, tr("Publicar en Encuadre"),
+                                    tr("Esta historia todavía no tiene un guion para publicar."));
+        return;
+    }
+
+    //
+    // Сохраняем изменения, чтобы опубликовать актуальный файл проекта
+    //
+    saveChanges();
+
+    EncuadreManager::PublishRequest request;
+    request.projectFilePath = currentProject->path();
+    request.projectName = currentProject->name();
+    for (const auto& screenplay : screenplays) {
+        request.draftNames.append(screenplay.first);
+    }
+    request.exportPdf = [this, screenplays](int _index, const QString& _filePath) {
+        if (_index < 0 || _index >= screenplays.size()) {
+            return false;
+        }
+        return exportManager->exportScreenplayPdf(screenplays.at(_index).second, _filePath);
+    };
+    encuadreManager->publish(request);
+}
+
 void ApplicationManager::Implementation::exportCurrentDocument()
 {
     if (projectsManager->currentProject() == nullptr) {
@@ -3197,6 +3253,8 @@ void ApplicationManager::initConnections()
     connect(d->menuView, &Ui::MenuView::importPressed, this, [this] { d->importProject(); });
     connect(d->menuView, &Ui::MenuView::exportCurrentDocumentPressed, this,
             [this] { d->exportCurrentDocument(); });
+    connect(d->menuView, &Ui::MenuView::publishToEncuadrePressed, this,
+            [this] { d->publishToEncuadre(); });
     connect(d->menuView, &Ui::MenuView::fullscreenPressed, this, [this] { d->toggleFullScreen(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
     //

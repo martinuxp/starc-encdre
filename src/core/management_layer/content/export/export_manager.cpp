@@ -1597,6 +1597,42 @@ void ExportManager::exportDocument(
     }
 }
 
+bool ExportManager::exportScreenplayPdf(BusinessLayer::AbstractModel* _model,
+                                        const QString& _filePath)
+{
+    using namespace BusinessLayer;
+
+    const auto screenplayTextModel = qobject_cast<ScreenplayTextModel*>(_model);
+    if (screenplayTextModel == nullptr) {
+        return false;
+    }
+
+    Log::info("Exporting screenplay to PDF for publishing in Encuadre");
+
+    const auto screenplayInformation = screenplayTextModel->informationModel();
+    ScreenplayExportOptions options;
+    options.filePath = _filePath;
+    options.fileFormat = ExportFileFormat::Pdf;
+    options.templateId = screenplayInformation->templateId();
+    options.includeTitlePage = true;
+    options.includeText = true;
+    options.includeFolders = true;
+    options.includeInlineNotes = false;
+    options.includeReviewMarks = false;
+    options.showScenesNumbers = screenplayInformation->showSceneNumbers();
+    options.showScenesNumbersOnLeft = screenplayInformation->showSceneNumbersOnLeft();
+    options.showScenesNumbersOnRight = screenplayInformation->showSceneNumbersOnRight();
+    options.showDialoguesNumbers = screenplayInformation->showDialoguesNumbers();
+    options.header = screenplayInformation->header();
+    options.printHeaderOnTitlePage = screenplayInformation->printHeaderOnTitlePage();
+    options.footer = screenplayInformation->footer();
+    options.printFooterOnTitlePage = screenplayInformation->printFooterOnTitlePage();
+
+    ScreenplayPdfExporter exporter;
+    exporter.exportTo(screenplayTextModel, options);
+    return QFileInfo::exists(_filePath);
+}
+
 void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model, const QString& _filePath)
 {
     if (!canExportDocument(_model)) {

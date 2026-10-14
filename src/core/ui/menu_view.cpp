@@ -53,6 +53,7 @@ public:
     QAction* saveProject = nullptr;
     QAction* saveProjectAs = nullptr;
     QAction* exportCurrentDocument = nullptr;
+    QAction* publishToEncuadre = nullptr;
     QAction* importProject = nullptr;
     QAction* fullScreen = nullptr;
     QAction* settings = nullptr;
@@ -95,6 +96,7 @@ MenuView::Implementation::Implementation(MenuView* _parent)
     , saveProject(new QAction)
     , saveProjectAs(new QAction)
     , exportCurrentDocument(new QAction)
+    , publishToEncuadre(new QAction)
     , importProject(new QAction)
     , fullScreen(new QAction)
     , settings(new QAction)
@@ -129,6 +131,7 @@ MenuView::Implementation::Implementation(MenuView* _parent)
         drawer->addAction(saveProjectAs);
         drawer->addAction(importProject);
         drawer->addAction(exportCurrentDocument);
+        drawer->addAction(publishToEncuadre);
         drawer->addAction(fullScreen);
         drawer->addAction(settings);
 
@@ -171,6 +174,10 @@ MenuView::Implementation::Implementation(MenuView* _parent)
         exportCurrentDocument->setCheckable(false);
         exportCurrentDocument->setEnabled(false);
         exportCurrentDocument->setVisible(false);
+        //
+        publishToEncuadre->setIconText(u8"\U000F0552");
+        publishToEncuadre->setCheckable(false);
+        publishToEncuadre->setVisible(false);
         //
         importProject->setIconText(u8"\U000f02fa");
         importProject->setCheckable(false);
@@ -274,6 +281,7 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->importProject, &QAction::triggered, this, &MenuView::importPressed);
     connect(d->exportCurrentDocument, &QAction::triggered, this,
             &MenuView::exportCurrentDocumentPressed);
+    connect(d->publishToEncuadre, &QAction::triggered, this, &MenuView::publishToEncuadrePressed);
     connect(d->fullScreen, &QAction::triggered, this, &MenuView::fullscreenPressed);
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     //
@@ -301,6 +309,7 @@ MenuView::MenuView(QWidget* _parent)
     connect(this, &MenuView::saveProjectAsPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::importPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::exportCurrentDocumentPressed, this, &MenuView::closeMenu);
+    connect(this, &MenuView::publishToEncuadrePressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::fullscreenPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::settingsPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::helpPressed, this, &MenuView::closeMenu);
@@ -384,6 +393,7 @@ void MenuView::setProjectActionsVisible(bool _visible)
     d->saveProject->setVisible(_visible);
     d->saveProjectAs->setVisible(_visible);
     d->exportCurrentDocument->setVisible(_visible);
+    d->publishToEncuadre->setVisible(_visible);
     d->importProject->setVisible(_visible);
     d->fullScreen->setVisible(_visible);
     d->drawer->updateGeometry();
@@ -551,6 +561,7 @@ void MenuView::updateTranslations()
     d->saveProjectAs->setText(tr("Save story as..."));
     d->importProject->setText(tr("Import documents..."));
     d->exportCurrentDocument->setText(tr("Export current document..."));
+    d->publishToEncuadre->setText(tr("Publicar en Encuadre..."));
     d->fullScreen->setText(tr("Full screen"));
     d->fullScreen->setWhatsThis(
         QKeySequence(QKeySequence::FullScreen).toString(QKeySequence::NativeText));

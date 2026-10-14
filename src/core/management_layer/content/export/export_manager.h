@@ -34,6 +34,12 @@ public:
      */
     void exportDocument(BusinessLayer::AbstractModel* _model, const QString& _filePath);
 
+    /**
+     * @brief Экспортировать сценарий в PDF по заданному пути без диалогов
+     *        (используется для публикации в портал Encuadre)
+     */
+    bool exportScreenplayPdf(BusinessLayer::AbstractModel* _model, const QString& _filePath);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

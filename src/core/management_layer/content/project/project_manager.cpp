@@ -4410,6 +4410,34 @@ BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const
     return nullptr;
 }
 
+QVector<QPair<QString, BusinessLayer::AbstractModel*>> ProjectManager::screenplayTextModels() const
+{
+    QVector<QPair<QString, BusinessLayer::AbstractModel*>> result;
+    auto model = d->projectStructureModel;
+    std::function<void(const QModelIndex&)> collect = [&](const QModelIndex& _parent) {
+        for (auto row = 0; row < model->rowCount(_parent); ++row) {
+            const auto index = model->index(row, 0, _parent);
+            const auto item = model->itemForIndex(index);
+            if (item == nullptr || item->type() == Domain::DocumentObjectType::RecycleBin) {
+                continue;
+            }
+
+            if (item->type() == Domain::DocumentObjectType::ScreenplayText) {
+                const auto textModel = d->modelsFacade.modelFor(item->uuid());
+                if (textModel != nullptr) {
+                    const auto screenplayItem = item->parent();
+                    result.append({ screenplayItem != nullptr ? screenplayItem->name()
+                                                              : item->name(),
+                                    textModel });
+                }
+            }
+            collect(index);
+        }
+    };
+    collect({});
+    return result;
+}
+
 Domain::DocumentObject* ProjectManager::currentDocument() const
 {
     if (d->view.activeModel == nullptr) {
