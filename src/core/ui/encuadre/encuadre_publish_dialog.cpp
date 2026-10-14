@@ -337,6 +337,10 @@ void EncuadrePublishDialog::updateTranslations()
     for (int row = 0; row < d->tagModel->rowCount() && row < tagNames.size(); ++row) {
         d->tagModel->item(row)->setText(tagNames.at(row));
     }
+    //
+    // ... комбобокс показывает текст, заданный при выборе элемента, поэтому обновляем его
+    //
+    d->tag->setText(d->tag->currentIndex().data().toString());
     d->versionNumber->setLabel(tr("Número de versión"));
     d->versionNumber->setHelper(tr("Déjalo vacío para numerarla automáticamente"));
     d->notes->setLabel(tr("Notas de la versión"));

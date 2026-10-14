@@ -23,6 +23,14 @@
 #include <QTimer>
 #include <QUrlQuery>
 
+#ifdef Q_OS_WIN
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#include <wincred.h>
+#endif
+
 
 namespace ManagementLayer {
 
@@ -42,6 +50,71 @@ QString linkKey(const QString& _projectFilePath, const QString& _name)
                                    QCryptographicHash::Sha1)
               .toHex();
     return QString("%1/%2/%3").arg(kLinksGroup, QString::fromLatin1(hash), _name);
+}
+
+#ifdef Q_OS_WIN
+/**
+ * @brief Имя записи в диспетчере учётных данных Windows для сессии портала
+ */
+const wchar_t* kCredentialTarget = L"Encuadre Script/portal-session";
+#endif
+
+/**
+ * @brief Прочитать сохранённую сессию портала
+ * @note В Windows сессия хранится в диспетчере учётных данных, в других системах -
+ *       в настройках приложения
+ */
+QString readStoredSessionToken()
+{
+#ifdef Q_OS_WIN
+    PCREDENTIALW credential = nullptr;
+    if (!CredReadW(kCredentialTarget, CRED_TYPE_GENERIC, 0, &credential)) {
+        return {};
+    }
+    const auto token
+        = QString::fromUtf8(reinterpret_cast<const char*>(credential->CredentialBlob),
+                            static_cast<int>(credential->CredentialBlobSize));
+    CredFree(credential);
+    return token;
+#else
+    return QSettings().value(kSessionTokenKey).toString();
+#endif
+}
+
+/**
+ * @brief Сохранить или удалить (пустая строка) сессию портала
+ */
+bool writeStoredSessionToken(const QString& _token)
+{
+#ifdef Q_OS_WIN
+    if (_token.isEmpty()) {
+        CredDeleteW(kCredentialTarget, CRED_TYPE_GENERIC, 0);
+        return true;
+    }
+
+    auto blob = _token.toUtf8();
+    CREDENTIALW credential = {};
+    credential.Type = CRED_TYPE_GENERIC;
+    credential.TargetName = const_cast<LPWSTR>(kCredentialTarget);
+    credential.UserName = const_cast<LPWSTR>(L"Encuadre Script");
+    credential.CredentialBlobSize = static_cast<DWORD>(blob.size());
+    credential.CredentialBlob = reinterpret_cast<LPBYTE>(blob.data());
+    credential.Persist = CRED_PERSIST_LOCAL_MACHINE;
+    const bool isWritten = CredWriteW(&credential, 0);
+    if (!isWritten) {
+        Log::warning("[Encuadre] Can't store the portal session, error %1",
+                     QString::number(GetLastError()));
+    }
+    return isWritten;
+#else
+    QSettings settings;
+    if (_token.isEmpty()) {
+        settings.remove(kSessionTokenKey);
+    } else {
+        settings.setValue(kSessionTokenKey, _token);
+    }
+    return true;
+#endif
 }
 
 /**
@@ -197,17 +270,25 @@ QString EncuadreManager::Implementation::errorText(const ApiResponse& _response)
 
 QString EncuadreManager::Implementation::sessionToken() const
 {
-    return QSettings().value(kSessionTokenKey).toString();
+#ifdef Q_OS_WIN
+    //
+    // Переносим сессию, сохранённую предыдущими версиями в настройках, в диспетчер
+    // учётных данных
+    //
+    QSettings settings;
+    if (settings.contains(kSessionTokenKey)) {
+        const auto legacyToken = settings.value(kSessionTokenKey).toString();
+        if (legacyToken.isEmpty() || writeStoredSessionToken(legacyToken)) {
+            settings.remove(kSessionTokenKey);
+        }
+    }
+#endif
+    return readStoredSessionToken();
 }
 
 void EncuadreManager::Implementation::setSessionToken(const QString& _token)
 {
-    QSettings settings;
-    if (_token.isEmpty()) {
-        settings.remove(kSessionTokenKey);
-    } else {
-        settings.setValue(kSessionTokenKey, _token);
-    }
+    writeStoredSessionToken(_token);
 }
 
 void EncuadreManager::Implementation::checkSession()
