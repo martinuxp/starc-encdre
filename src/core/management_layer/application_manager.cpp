@@ -2383,7 +2383,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
                     .arg(projectFileSuffix.toUpper(), ExtensionHelper::starc().toUpper()),
                 { { kNeverAskAgainButtonId, tr("Never ask again"), Dialog::NormalButton },
                   { kKeepButtonId, tr("Keep .%1").arg(projectFileSuffix), Dialog::RejectButton },
-                  { kYesButtonId, tr("Switch to .STARC"), Dialog::AcceptButton } });
+                  { kYesButtonId, tr("Switch to .ENCDRE"), Dialog::AcceptButton } });
             QObject::connect(informationDialog, &Dialog::finished, informationDialog,
                              [this, informationDialog, kNeverAskAgainButtonId,
                               kKeepButtonId](const Dialog::ButtonInfo& _buttonInfo) {

@@ -203,19 +203,22 @@ void Button::paintEvent(QPaintEvent* _event)
     //
     // Заливаем фон
     //
+    //
+    // Material Design 3: filled buttons get a state layer of the content color on hover/focus
+    //
     QColor backgroundColor;
     if (isEnabled() && underMouse()) {
         if (d->isContained || d->isFlat) {
-            backgroundColor = ColorHelper::transparent(
-                this->backgroundColor(), 1.0 - Ui::DesignSystem::hoverBackgroundOpacity());
+            backgroundColor = ColorHelper::flattenAlpha(
+                ColorHelper::transparent(textColor(), 0.08), this->backgroundColor());
         } else {
             backgroundColor = ColorHelper::transparent(this->backgroundColor(),
                                                        Ui::DesignSystem::hoverBackgroundOpacity());
         }
     } else if (hasFocus()) {
         if (d->isContained || d->isFlat) {
-            backgroundColor = ColorHelper::transparent(
-                this->backgroundColor(), 1.0 - Ui::DesignSystem::focusBackgroundOpacity());
+            backgroundColor = ColorHelper::flattenAlpha(
+                ColorHelper::transparent(textColor(), 0.12), this->backgroundColor());
         } else {
             backgroundColor = ColorHelper::transparent(this->backgroundColor(),
                                                        Ui::DesignSystem::focusBackgroundOpacity());
@@ -229,7 +232,10 @@ void Button::paintEvent(QPaintEvent* _event)
         //
         // Тень рисуем только в случае, если кнопка имеет установленный фон
         //
-        if (d->isContained) {
+        //
+        // Material Design 3: filled buttons have no elevation at rest, a subtle one on hover
+        //
+        if (d->isContained && isEnabled() && underMouse()) {
             QPixmap backgroundImage(backgroundRect.size());
             backgroundImage.fill(Qt::transparent);
             QPainter backgroundImagePainter(&backgroundImage);
@@ -260,7 +266,15 @@ void Button::paintEvent(QPaintEvent* _event)
     // Рисуем рамку
     //
     if (d->isOutlined) {
-        painter.setPen(QPen(textColor(), 1.0 * Ui::DesignSystem::scaleFactor()));
+        //
+        // Material Design 3: outline is a neutral color, not the label color
+        //
+        const auto outlineBase = this->backgroundColor().isValid()
+            ? this->backgroundColor()
+            : Ui::DesignSystem::color().background();
+        const auto outlineColor = ColorHelper::flattenAlpha(
+            ColorHelper::transparent(ColorHelper::contrasted(outlineBase), 0.32), outlineBase);
+        painter.setPen(QPen(outlineColor, 1.0 * Ui::DesignSystem::scaleFactor()));
         painter.setBrush(Qt::NoBrush);
         painter.drawRoundedRect(backgroundRect, Ui::DesignSystem::button().borderRadius(),
                                 Ui::DesignSystem::button().borderRadius());

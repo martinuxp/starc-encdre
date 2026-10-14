@@ -3281,13 +3281,13 @@
     <name>DialogHelper</name>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="33"/>
-        <source>Story Architect project</source>
-        <translation>Story Architect project</translation>
+        <source>Encuadre Script project</source>
+        <translation>Encuadre Script project</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="39"/>
-        <source>Story Architect template</source>
-        <translation>Story Architect template</translation>
+        <source>Encuadre Script template</source>
+        <translation>Encuadre Script template</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="45"/>
@@ -3775,7 +3775,7 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
     <message>
         <location filename="../management_layer/application_manager.cpp" line="2360"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
-        <translation>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</translation>
+        <translation>Some project data cannot be saved in .%1 format. We recommend you to use Encuadre Script .%2 format so all the project data will be saved properly.</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="2363"/>
@@ -3789,8 +3789,8 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="2365"/>
-        <source>Switch to .STARC</source>
-        <translation>Switch to .STARC</translation>
+        <source>Switch to .ENCDRE</source>
+        <translation>Switch to .ENCDRE</translation>
     </message>
     <message>
         <source>Maximum active sessions reached. To authorize from a new device, end one of the current sessions.</source>
@@ -8087,7 +8087,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../ui/account/account_view.cpp" line="523"/>
         <source>I want to receive STARC news</source>
-        <translation>I want to receive STARC news</translation>
+        <translation>I want to receive Encuadre Script news</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="521"/>
@@ -14192,8 +14192,8 @@ This action can&apos;t be canceled.</source>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="632"/>
-        <source>About Story Architect</source>
-        <translation>About Story Architect</translation>
+        <source>About Encuadre Script</source>
+        <translation>About Encuadre Script</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="637"/>
@@ -15781,7 +15781,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="928"/>
         <source>Welcome to the Story Architect</source>
-        <translation>Welcome to the Story Architect</translation>
+        <translation>Welcome to the Encuadre Script</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="929"/>
@@ -15831,7 +15831,7 @@ FREE, PRO and CLOUD features</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="957"/>
         <source>I want to receive STARC news</source>
-        <translation>I want to receive STARC news</translation>
+        <translation>I want to receive Encuadre Script news</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="944"/>
@@ -15908,7 +15908,7 @@ FREE, PRO and CREATOR features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="963"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
-        <translation>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</translation>
+        <translation>Encuadre Script provides tools for working with any form of writing. Choose which ones you plan to use:</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="965"/>
@@ -15943,7 +15943,7 @@ FREE, PRO and CREATOR features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="975"/>
         <source>We&apos;ll help you get used to STARC by leveraging your experience with other applications.</source>
-        <translation>We&apos;ll help you get used to STARC by leveraging your experience with other applications.</translation>
+        <translation>We&apos;ll help you get used to Encuadre Script by leveraging your experience with other applications.</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="978"/>
@@ -16004,7 +16004,7 @@ FREE, PRO and CREATOR features</source>
 • automatically creates backup copies of local and cloud projects in the folder &quot;%1&quot;
 
 This will help to protect your creativity in any unforeseen situation.</source>
-        <translation>You should know that Story Architect cares about the safety of your work, so the app:
+        <translation>You should know that Encuadre Script cares about the safety of your work, so the app:
 
 • automatically saves changes every three seconds when there is no activity
 
@@ -16743,7 +16743,7 @@ Promo code validity period is a 1 year</translation>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="210"/>
         <source>Story Architect version %1 was published for testing.</source>
-        <translation>Story Architect version %1 was published for testing.</translation>
+        <translation>Encuadre Script version %1 was published for testing.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="211"/>
@@ -22159,7 +22159,7 @@ If you work with no interruptions it saves the project every 3 minutes.</transla
     </message>
     <message>
         <source>Your Story Architect cloud projects will be removed tomorrow if you don&apos;t renew CLOUD subscription.</source>
-        <translation type="vanished">Your Story Architect cloud projects will be removed tomorrow if you don&apos;t renew CLOUD subscription.</translation>
+        <translation type="vanished">Your Encuadre Script cloud projects will be removed tomorrow if you don&apos;t renew CLOUD subscription.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="89"/>

@@ -3258,13 +3258,13 @@
     <name>DialogHelper</name>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="33"/>
-        <source>Story Architect project</source>
-        <translation>Proyecto de Story Architect</translation>
+        <source>Encuadre Script project</source>
+        <translation>Proyecto de Encuadre Script</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="39"/>
-        <source>Story Architect template</source>
-        <translation>Plantilla de Story Architect</translation>
+        <source>Encuadre Script template</source>
+        <translation>Plantilla de Encuadre Script</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="45"/>
@@ -3740,7 +3740,7 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
     <message>
         <location filename="../management_layer/application_manager.cpp" line="2360"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
-        <translation>Algunos datos del proyecto no se pueden guardar en formato .%1. Le recomendamos que utilice el formato Story Architect .%2 para que todos los datos del proyecto se guarden correctamente.</translation>
+        <translation>Algunos datos del proyecto no se pueden guardar en formato .%1. Le recomendamos que utilice el formato Encuadre Script .%2 para que todos los datos del proyecto se guarden correctamente.</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="2363"/>
@@ -3754,8 +3754,8 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="2365"/>
-        <source>Switch to .STARC</source>
-        <translation>Cambiar a .STARC</translation>
+        <source>Switch to .ENCDRE</source>
+        <translation>Cambiar a .ENCDRE</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="2564"/>
@@ -7988,7 +7988,7 @@ Entra el Personaje B.</translation>
     <message>
         <location filename="../ui/account/account_view.cpp" line="523"/>
         <source>I want to receive STARC news</source>
-        <translation>Quiero recibir noticias de STARC</translation>
+        <translation>Quiero recibir noticias de Encuadre Script</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="521"/>
@@ -14029,8 +14029,8 @@ Entra el Personaje B.</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="632"/>
-        <source>About Story Architect</source>
-        <translation>Acerca de Story Architect</translation>
+        <source>About Encuadre Script</source>
+        <translation>Acerca de Encuadre Script</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="637"/>
@@ -15614,7 +15614,7 @@ Entra el Personaje B.</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="928"/>
         <source>Welcome to the Story Architect</source>
-        <translation>Bienvenido a Story Architect</translation>
+        <translation>Bienvenido a Encuadre Script</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="929"/>
@@ -15658,7 +15658,7 @@ Entra el Personaje B.</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="957"/>
         <source>I want to receive STARC news</source>
-        <translation>Quiero recibir noticias de STARC</translation>
+        <translation>Quiero recibir noticias de Encuadre Script</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="944"/>
@@ -15735,7 +15735,7 @@ FREE, PRO and CREATOR features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="963"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
-        <translation>Story Architect ofrece herramientas para trabajar con cualquier forma de escritura. Elige cuáles planeas usar:</translation>
+        <translation>Encuadre Script ofrece herramientas para trabajar con cualquier forma de escritura. Elige cuáles planeas usar:</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="965"/>
@@ -15770,7 +15770,7 @@ FREE, PRO and CREATOR features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="975"/>
         <source>We&apos;ll help you get used to STARC by leveraging your experience with other applications.</source>
-        <translation>Te ayudaremos a acostumbrarte a STARC aprovechando tu experiencia con otras aplicaciones.</translation>
+        <translation>Te ayudaremos a acostumbrarte a Encuadre Script aprovechando tu experiencia con otras aplicaciones.</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="978"/>
@@ -15831,7 +15831,7 @@ FREE, PRO and CREATOR features</source>
 • automatically creates backup copies of local and cloud projects in the folder &quot;%1&quot;
 
 This will help to protect your creativity in any unforeseen situation.</source>
-        <translation>Debes saber que Story Architect se preocupa por la seguridad de tu trabajo, por lo que la aplicación:
+        <translation>Debes saber que Encuadre Script se preocupa por la seguridad de tu trabajo, por lo que la aplicación:
 
 • guarda automáticamente los cambios cada tres segundos cuando no hay actividad
 
@@ -16566,7 +16566,7 @@ El período de validez del código promocional es de 1 año</translation>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="210"/>
         <source>Story Architect version %1 was published for testing.</source>
-        <translation>Versión de prueba %1 de Story Architect publicada.</translation>
+        <translation>Versión de prueba %1 de Encuadre Script publicada.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="211"/>

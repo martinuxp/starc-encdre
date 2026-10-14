@@ -339,6 +339,7 @@ void Drawer::paintEvent(QPaintEvent* _event)
     Q_UNUSED(_event)
 
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     //
     // Заливаем фон
@@ -474,16 +475,22 @@ void Drawer::paintEvent(QPaintEvent* _event)
         // ... обводка
         //
         const QRectF actionRect(0.0, y, width(), Ui::DesignSystem::drawer().actionHeight());
+        //
+        // Material Design 3: active and hovered items use a fully rounded indicator
+        //
+        const QRectF indicatorRect
+            = actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins());
+        const qreal indicatorRadius = indicatorRect.height() / 2.0;
         if (action->isChecked()) {
-            painter.fillRect(
-                actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
-                Ui::DesignSystem::drawer().selectionColor());
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(Ui::DesignSystem::drawer().selectionColor());
+            painter.drawRoundedRect(indicatorRect, indicatorRadius, indicatorRadius);
         } else if (underMouse() && action->isEnabled()
                    && actionRect.contains(mapFromGlobal(QCursor::pos()))) {
-            painter.fillRect(
-                actionRect.marginsRemoved(Ui::DesignSystem::drawer().selectionMargins()),
-                ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
-                                         Ui::DesignSystem::hoverBackgroundOpacity()));
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
+                                                      Ui::DesignSystem::hoverBackgroundOpacity()));
+            painter.drawRoundedRect(indicatorRect, indicatorRadius, indicatorRadius);
         }
 
         painter.setPen(action->isChecked() ? Ui::DesignSystem::color().accent()

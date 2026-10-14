@@ -22,6 +22,12 @@ public:
     void setAutoAdjustSize(bool _auto);
 
     /**
+     * @brief Material Design 3: paint selected and hovered rows as a rounded indicator
+     *        with the given colors (invalid colors disable it)
+     */
+    void setRoundedSelectionColors(const QColor& _selectionColor, const QColor& _hoverColor);
+
+    /**
      * @brief Переопределяем метод, чтобы дать доступ к нему наружу
      */
     QSize viewportSizeHint() const override;
@@ -57,6 +63,12 @@ protected:
      * @brief Декорируем вьюпорт после нажатия клавиши
      */
     void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Рисуем скруглённый индикатор выделения под строкой
+     */
+    void drawRow(QPainter* _painter, const QStyleOptionViewItem& _option,
+                 const QModelIndex& _index) const override;
 
     /**
      * @brief Переопределяем, чтобы при необходимости пересчитывать размер элементов

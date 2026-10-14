@@ -1,5 +1,6 @@
 #include "tree_view.h"
 
+#include <QCursor>
 #include <QDomDocument>
 #include <QMouseEvent>
 #include <QPainter>
@@ -34,6 +35,12 @@ public:
     QRectF decorationRect;
     QVariantAnimation decorationRadiusAnimation;
     QVariantAnimation decorationOpacityAnimation;
+
+    /**
+     * @brief Цвета скруглённого индикатора выделения и наведения
+     */
+    QColor roundedSelectionColor;
+    QColor roundedHoverColor;
 };
 
 TreeView::Implementation::Implementation()
@@ -74,6 +81,13 @@ TreeView::TreeView(QWidget* _parent)
         update();
         viewport()->update();
     });
+}
+
+void TreeView::setRoundedSelectionColors(const QColor& _selectionColor, const QColor& _hoverColor)
+{
+    d->roundedSelectionColor = _selectionColor;
+    d->roundedHoverColor = _hoverColor;
+    viewport()->update();
 }
 
 void TreeView::setAutoAdjustSize(bool _auto)
@@ -186,6 +200,36 @@ void TreeView::paintEvent(QPaintEvent* _event)
         painter.setOpacity(1.0);
         painter.setClipRect(QRect(), Qt::NoClip);
     }
+}
+
+void TreeView::drawRow(QPainter* _painter, const QStyleOptionViewItem& _option,
+                       const QModelIndex& _index) const
+{
+    if (d->roundedSelectionColor.isValid()) {
+        const bool isSelected = selectionModel() != nullptr && selectionModel()->isSelected(_index);
+        const bool isHovered = !isSelected && underMouse()
+            && indexAt(viewport()->mapFromGlobal(QCursor::pos())).row() == _index.row()
+            && indexAt(viewport()->mapFromGlobal(QCursor::pos())).parent() == _index.parent();
+        if (isSelected || (isHovered && d->roundedHoverColor.isValid())) {
+            //
+            // Material Design 3: fully rounded indicator inset from the row edges
+            //
+            const qreal scale = _option.rect.height() / 48.0;
+            const qreal horizontalInset = 8.0 * scale;
+            const qreal verticalInset = 2.0 * scale;
+            const QRectF indicatorRect = QRectF(_option.rect).adjusted(
+                horizontalInset, verticalInset, -horizontalInset, -verticalInset);
+            _painter->save();
+            _painter->setRenderHint(QPainter::Antialiasing);
+            _painter->setPen(Qt::NoPen);
+            _painter->setBrush(isSelected ? d->roundedSelectionColor : d->roundedHoverColor);
+            _painter->drawRoundedRect(indicatorRect, indicatorRect.height() / 2.0,
+                                      indicatorRect.height() / 2.0);
+            _painter->restore();
+        }
+    }
+
+    QTreeView::drawRow(_painter, _option, _index);
 }
 
 void TreeView::resizeEvent(QResizeEvent* _event)

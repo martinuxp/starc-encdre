@@ -1229,9 +1229,9 @@ class DesignSystem::Toggle::Implementation
 public:
     explicit Implementation(qreal _scaleFactor);
 
-    QSizeF trackSize = { 32.0, 14.0 };
-    QSizeF tumblerSize = { 22.0, 22.0 };
-    qreal tumblerOverflow = 4.0;
+    QSizeF trackSize = { 52.0, 32.0 };
+    QSizeF tumblerSize = { 24.0, 24.0 };
+    qreal tumblerOverflow = -4.0;
 };
 
 DesignSystem::Toggle::Implementation::Implementation(qreal _scaleFactor)
@@ -1852,7 +1852,7 @@ public:
 
     QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
     QMarginsF actionMargins = { 16.0, 12.0, 12.0, 12.0 };
-    QMarginsF selectionMargins = { 8.0, 4.0, 8.0, 4.0 };
+    QMarginsF selectionMargins = { 12.0, 4.0, 12.0, 4.0 };
     qreal spacing = 32.0;
     qreal width = 304.0;
     qreal actionHeight = 48.0;

@@ -346,9 +346,15 @@ void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     palette.setColor(QPalette::Base, backgroundColor());
     auto alternateBaseColor = textColor();
     alternateBaseColor.setAlphaF(Ui::DesignSystem::hoverBackgroundOpacity());
-    palette.setColor(QPalette::AlternateBase, alternateBaseColor);
     palette.setColor(QPalette::Text, textColor());
-    palette.setColor(QPalette::Highlight, Ui::DesignSystem::tree().selectionColor());
+    //
+    // Material Design 3: selection and hover are painted by the view as rounded indicators,
+    // so the item delegate and the branch area stay transparent
+    //
+    d->tree->setRoundedSelectionColors(Ui::DesignSystem::tree().selectionColor(),
+                                       alternateBaseColor);
+    palette.setColor(QPalette::AlternateBase, Qt::transparent);
+    palette.setColor(QPalette::Highlight, Qt::transparent);
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().accent());
     d->tree->setPalette(palette);
     d->tree->setIndentation(static_cast<int>(Ui::DesignSystem::tree().indicatorWidth()));

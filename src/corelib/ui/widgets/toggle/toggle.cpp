@@ -158,79 +158,76 @@ void Toggle::paintEvent(QPaintEvent* _event)
 
     painter.fillRect(_event->rect(), backgroundColor());
 
-    const auto tumblerColor = d->isChecked
-        ? Ui::DesignSystem::color().accent()
-        : (ColorHelper::isColorLight(backgroundColor()) ? backgroundColor() : textColor());
-    const auto trackColor
-        = d->isChecked ? tumblerColor.lighter(140) : ColorHelper::nearby(tumblerColor, 160);
+    //
+    // Material Design 3 switch: filled track with a light handle when checked,
+    // outlined track with a small outline-colored handle when unchecked
+    //
+    const auto accentColor = Ui::DesignSystem::color().accent();
+    const auto outlineColor = ColorHelper::flattenAlpha(
+        ColorHelper::transparent(textColor(), 0.6), backgroundColor());
+    const auto trackColor = d->isChecked
+        ? accentColor
+        : ColorHelper::flattenAlpha(ColorHelper::transparent(textColor(), 0.12),
+                                    backgroundColor());
+    const auto handleColor
+        = d->isChecked ? Ui::DesignSystem::color().onAccent() : outlineColor;
+    const qreal opacity = isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity();
+    painter.setOpacity(opacity);
+
     //
     // Трэк
     //
-    painter.setBrush(trackColor);
     const QRectF trackRect({ contentsMargins().left() + Ui::DesignSystem::layout().px12()
                                  + Ui::DesignSystem::toggle().tumblerOverflow(),
                              contentsMargins().top() + Ui::DesignSystem::layout().px12()
                                  + Ui::DesignSystem::toggle().tumblerOverflow() },
                            Ui::DesignSystem::toggle().trackSize());
-
-    painter.drawRoundedRect(trackRect, trackRect.height() / 2.0, trackRect.height() / 2.0);
-
-    //
-    // Переключатель
-    //
-    painter.setBrush(tumblerColor);
-    const QRectF toggleRect = d->tumblerAnimation.currentValue().toRectF();
-    const qreal borderRadius = toggleRect.height() / 2.0;
-    //
-    // ... подготовим тень
-    //
-    static QPixmap backgroundImage;
-    if (backgroundImage.size() != toggleRect.size().toSize()) {
-        backgroundImage = QPixmap(toggleRect.size().toSize());
-        backgroundImage.fill(Qt::transparent);
-        QPainter backgroundImagePainter(&backgroundImage);
-        backgroundImagePainter.setPen(Qt::NoPen);
-        backgroundImagePainter.setBrush(Ui::DesignSystem::color().textEditor());
-        backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()),
-                                               borderRadius, borderRadius);
-    }
-    //
-    // ... рисуем тень
-    //
-    const qreal shadowHeight = Ui::DesignSystem::card().minimumShadowBlurRadius();
-    const bool useCache = true;
-    const QPixmap shadow
-        = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
-                                  shadowHeight, Ui::DesignSystem::color().shadow(), useCache);
-    painter.drawPixmap(toggleRect.topLeft()
-                           - QPointF{ Ui::DesignSystem::card().shadowMargins().left(),
-                                      Ui::DesignSystem::card().shadowMargins().top() },
-                       shadow);
-    //
-    // ... рисуем декорацию
-    //
-    if (underMouse() || hasFocus()) {
+    painter.setBrush(trackColor);
+    if (!d->isChecked) {
+        const qreal outlineWidth = 2.0 * Ui::DesignSystem::scaleFactor();
+        painter.setPen(QPen(outlineColor, outlineWidth));
+        const QRectF outlineRect
+            = trackRect.adjusted(outlineWidth / 2.0, outlineWidth / 2.0, -outlineWidth / 2.0,
+                                 -outlineWidth / 2.0);
+        painter.drawRoundedRect(outlineRect, outlineRect.height() / 2.0,
+                                outlineRect.height() / 2.0);
         painter.setPen(Qt::NoPen);
-        painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
-        painter.setOpacity(hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
-                                      : Ui::DesignSystem::hoverBackgroundOpacity());
-        const auto radius = d->decorationAnimation.maximumRadius();
-        painter.drawEllipse(toggleRect.center(), radius, radius);
-        painter.setOpacity(1.0);
+    } else {
+        painter.drawRoundedRect(trackRect, trackRect.height() / 2.0, trackRect.height() / 2.0);
+    }
+
+    //
+    // Состояния наведения, фокуса и нажатия
+    //
+    const QRectF slotRect = d->tumblerAnimation.currentValue().toRectF();
+    const auto stateColor = d->isChecked ? accentColor : textColor();
+    if (underMouse() || hasFocus()) {
+        painter.setBrush(stateColor);
+        painter.setOpacity(opacity
+                           * (hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
+                                         : Ui::DesignSystem::hoverBackgroundOpacity()));
+        const auto radius = d->decorationAnimation.maximumRadius() * 0.84;
+        painter.drawEllipse(slotRect.center(), radius, radius);
+        painter.setOpacity(opacity);
     }
     if (d->decorationAnimation.state() == ClickAnimation::Running) {
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
-        painter.setOpacity(d->decorationAnimation.opacity());
-        const auto radius = d->decorationAnimation.radius();
-        painter.drawEllipse(toggleRect.center(), radius, radius);
-        painter.setOpacity(1.0);
+        painter.setBrush(stateColor);
+        painter.setOpacity(opacity * d->decorationAnimation.opacity());
+        const auto radius = d->decorationAnimation.radius() * 0.84;
+        painter.drawEllipse(slotRect.center(), radius, radius);
+        painter.setOpacity(opacity);
     }
-    painter.setBrush(tumblerColor);
+
     //
-    // ... рисуем сам переключатель
+    // Переключатель: 24dp when checked or pressed, 16dp when unchecked
     //
-    painter.drawRoundedRect(toggleRect, toggleRect.width() / 2.0, toggleRect.width() / 2.0);
+    const bool isPressed = d->decorationAnimation.state() == ClickAnimation::Running;
+    const qreal handleSize = (d->isChecked || isPressed ? slotRect.width()
+                                                        : slotRect.width() * 2.0 / 3.0);
+    const QRectF handleRect(slotRect.center() - QPointF(handleSize, handleSize) / 2.0,
+                            QSizeF(handleSize, handleSize));
+    painter.setBrush(handleColor);
+    painter.drawEllipse(handleRect);
 }
 
 void Toggle::mousePressEvent(QMouseEvent* _event)
