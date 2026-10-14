@@ -200,8 +200,8 @@ MenuView::Implementation::Implementation(MenuView* _parent)
         //
         notifications->setIconText(u8"\U000F009A");
 
-        appName->setText("Story Architect");
-        appName->setLink(QUrl("https://starc.app"));
+        appName->setText("Encuadre Script");
+        appName->setLink(QUrl("https://prod.encuadre.muxp.art"));
         appVersion->setLink(QUrl("https://starc.app/blog/"));
         aboutAppSpacer->setText(" - ");
 
@@ -628,8 +628,8 @@ void MenuView::Implementation::createMenuBar()
     //
 
     // Основной пункт меню с нeзвазванием "Story Architect"
-    QMenu* appMenu = menuBar->addMenu("Story Architect");
-    aboutApplicationAction->setText(tr("About Story Architect"));
+    QMenu* appMenu = menuBar->addMenu("Encuadre Script");
+    aboutApplicationAction->setText(tr("About Encuadre Script"));
     aboutApplicationAction->setMenuRole(QAction::ApplicationSpecificRole);
     appMenu->addAction(aboutApplicationAction);
     appMenu->addSeparator();

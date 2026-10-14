@@ -30,13 +30,13 @@ QString makeFilter(const QString& _title, const QString& _extension)
 
 QString DialogHelper::starcProjectFilter()
 {
-    return makeFilter(QApplication::translate("DialogHelper", "Story Architect project"),
+    return makeFilter(QApplication::translate("DialogHelper", "Encuadre Script project"),
                       ExtensionHelper::starc());
 }
 
 QString DialogHelper::starcTemplateFilter()
 {
-    return makeFilter(QApplication::translate("DialogHelper", "Story Architect template"),
+    return makeFilter(QApplication::translate("DialogHelper", "Encuadre Script template"),
                       ExtensionHelper::starct());
 }
 

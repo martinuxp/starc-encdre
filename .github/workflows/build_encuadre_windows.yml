@@ -1,0 +1,107 @@
+name: Build Encuadre Script for Windows
+
+env:
+  APP_VERSION: 0.8.4
+
+on:
+  push:
+    branches: [ encuadre ]
+  pull_request:
+    branches: [ encuadre ]
+  workflow_dispatch: {}
+
+jobs:
+  build_windows_64_qt6:
+    name: Build Windows 64 version with qt6
+    runs-on: windows-2022
+    timeout-minutes: 120
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      #
+      # Only public submodules are used, cloud and commercial plugins are private
+      #
+      - name: Checkout public submodules
+        shell: bash
+        run: |
+          git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+
+      - name: Add info about dev build to the env
+        shell: bash
+        run: |
+          echo "DEV_BUILD=${{ github.run_number }}" >> $GITHUB_ENV
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.11.2
+          arch: win64_msvc2022_64
+          target: desktop
+          setup-python: false
+          modules: "qt5compat qtimageformats qtmultimedia qtspeech qtwebsockets"
+          # we need this until miurahr/aqtinstall#1007 ships 3.3.1 for Qt >= 6.11.0 for Windows.
+          aqtsource: 'aqtinstall @ git+https://github.com/miurahr/aqtinstall@16db45a70b5905ad596941b223469bc86a56901e'
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          choco install openssl --version=3.1.1 --force
+          choco install jom
+          choco install nsis
+
+      - name: Create OpenSSL path without spaces
+        shell: pwsh
+        run: |
+          New-Item -ItemType Junction -Path 'C:\OpenSSL' -Target 'C:\Program Files\OpenSSL' -Force
+          "OPENSSL_PREFIX=C:\OpenSSL" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8NoBOM
+
+      - name: Configure MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build crashpad
+        shell: bash
+        run: |
+          cd build
+          chmod +x ./build_crashpad.sh
+          ./build_crashpad.sh -a x64
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" CRASHPAD_ARCH=x64
+
+      - name: Build
+        run: |
+          cd src
+          jom -j4
+
+      - name: Prepare installer folder
+        shell: bash
+        run: |
+          cd build/windows
+          chmod +x ./make-exe-encuadre.sh
+          ./make-exe-encuadre.sh ${{env.APP_VERSION}}
+
+      - name: Make installer
+        uses: joncloud/makensis-action@v5.0
+        with:
+          arguments: "/V3"
+          script-file: "build/windows/encuadre_script.nsi"
+
+      - name: Make archive with portable version
+        uses: vimtor/action-zip@v1
+        with:
+          files: build/windows/files_64
+          dest: build/windows/encuadre-script.zip
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: encuadre-script windows_64
+          path: |
+            build/windows/encuadre-script-setup.exe
+            build/windows/encuadre-script.zip

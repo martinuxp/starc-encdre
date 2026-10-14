@@ -533,7 +533,10 @@ bool ApplicationManager::Implementation::initCrashpad()
     appVersion += "-qt6";
 #endif
 
-    const QString url = "https://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
+    //
+    // Encuadre Script: empty url keeps crash dumps local, nothing is uploaded
+    //
+    const QString url;
 
     QMap<std::string, std::string> annotations;
     annotations["format"] = "minidump";
@@ -1600,13 +1603,13 @@ void ApplicationManager::Implementation::setDesignSystemDensity(int _density)
 void ApplicationManager::Implementation::updateWindowTitle(const QString& _projectName)
 {
     if (projectsManager->currentProject() == nullptr) {
-        applicationView->setWindowTitle("Story Architect");
+        applicationView->setWindowTitle("Encuadre Script");
         return;
     }
 
     const auto currentProject = projectsManager->currentProject();
     applicationView->setWindowTitle(
-        QString("%1%2 (%3) - Story Architect%4")
+        QString("%1%2 (%3) - Encuadre Script%4")
             .arg(
 #ifndef Q_OS_MAC
                 "[*]"
@@ -3003,12 +3006,14 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
             //
             // Отправим запрос в статистику
             //
-            d->sendStartupStatistics();
+            // Encuadre Script: usage statistics are not sent to Story Apps
+            // d->sendStartupStatistics();
 
             //
             // Покажем диалог отправки сообщения об ошибке
             //
-            d->sendCrashInfo();
+            // Encuadre Script: crash reports are not sent to Story Apps
+            // d->sendCrashInfo();
 
             //
             // Загружаем недостающие шрифты

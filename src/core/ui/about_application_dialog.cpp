@@ -89,7 +89,7 @@ AboutApplicationDialog::AboutApplicationDialog(QWidget* _parent)
     : AbstractDialog(_parent)
     , d(new Implementation(this))
 {
-    setTitle("Story Architect");
+    setTitle("Encuadre Script");
     setRejectButton(d->closeButton);
 
     int row = 0;

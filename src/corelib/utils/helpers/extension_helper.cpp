@@ -5,7 +5,7 @@
 
 QString ExtensionHelper::starc()
 {
-    return QLatin1String("starc");
+    return QLatin1String("encdre");
 }
 
 QString ExtensionHelper::starct()

@@ -61,9 +61,9 @@ Application::Application(int& _argc, char** _argv)
     : QApplication(_argc, _argv)
     , d(new Implementation)
 {
-    setApplicationName("Story Architect");
-    setOrganizationName("Story Apps");
-    setOrganizationDomain("storyapps.dev");
+    setApplicationName("Encuadre Script");
+    setOrganizationName("Grupo Encuadre");
+    setOrganizationDomain("encuadre.muxp.art");
 
     //
     // Настроим таймеры определения простоя приложения

@@ -45,7 +45,7 @@ public:
 
 QString ProjectsModelProjectItem::extension()
 {
-    return ".starc";
+    return ".encdre";
 }
 
 

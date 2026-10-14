@@ -3,18 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplyName</key>
-    <string>Story Architect</string>
+    <string>Encuadre Script</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>starc</string>
+				<string>encdre</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>icon.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Story Architect project</string>
+			<string>Encuadre Script project</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -26,9 +26,9 @@
     <key>CFBundleIconFile</key>
     <string>icon.icns</string>
 	<key>CFBundleIdentifier</key>
-    <string>dev.storyapps.starc-beta</string>
+    <string>art.muxp.encuadre.script</string>
     <key>CFBundleName</key>
-    <string>Story Architect</string>
+    <string>Encuadre Script</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
