@@ -150,6 +150,26 @@ QString bugsplatAppName()
 }
 
 /**
+ * @brief Encuadre Script: folders that still point to the Story Architect defaults
+ *        (Documents/starc/...) are moved to Documents/Encuadre Script/...
+ */
+void migrateStoryArchitectFolders()
+{
+    const auto documents = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    const QVector<QPair<QString, QString>> folders = {
+        { DataStorageLayer::kProjectSaveFolderKey, QStringLiteral("projects") },
+        { DataStorageLayer::kApplicationBackupsFolderKey, QStringLiteral("backups") },
+    };
+    for (const auto& folder : folders) {
+        const auto oldPath = QDir::cleanPath(documents + "/starc/" + folder.second);
+        if (QDir::cleanPath(settingsValue(folder.first).toString()) == oldPath) {
+            setSettingsValue(folder.first,
+                             QDir::cleanPath(documents + "/Encuadre Script/" + folder.second));
+        }
+    }
+}
+
+/**
  * @brief Имя базы данных проекта в багсплате
  */
 QString bugsplatDatabaseName()
@@ -628,7 +648,7 @@ void ApplicationManager::Implementation::initLogging()
     // Удаляем старые логи
     //
     const auto logFileFolder
-        = QString("%1/starc/logs")
+        = QString("%1/Encuadre Script/logs")
               .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     auto logFiles = QDir(logFileFolder).entryInfoList(QDir::Files, QDir::Time);
     constexpr int maxLogFilesSize = 11;
@@ -2839,6 +2859,8 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     // Первым делом настраиваем сбор логов
     //
     d->initLogging();
+
+    migrateStoryArchitectFolders();
 
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 

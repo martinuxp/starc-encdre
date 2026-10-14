@@ -109,7 +109,7 @@ SettingsStorage::Implementation::Implementation()
     defaultSettings.insert(kApplicationSaveBackupsKey, true);
     defaultSettings.insert(kApplicationBackupsFolderKey,
                            QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
-                               + "/starc/backups");
+                               + "/Encuadre Script/backups");
     defaultSettings.insert(kApplicationBackupsQtyKey, 7);
     defaultSettings.insert(kApplicationShowDocumentsPagesKey, true);
     defaultSettings.insert(kApplicationUseTypewriterSoundKey, false);
@@ -132,7 +132,7 @@ SettingsStorage::Implementation::Implementation()
     defaultSettings.insert(kProjectTypeKey, 0);
     defaultSettings.insert(kProjectSaveFolderKey,
                            QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
-                               + "/starc/projects");
+                               + "/Encuadre Script/projects");
     defaultSettings.insert(kProjectImportFolderKey,
                            QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
     defaultSettings.insert(kProjectExportFolderKey,
